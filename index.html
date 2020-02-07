@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="utf-8">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <style>
+    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+  </style>
+</head>
+
+<body>
+  <script>
+    // Feel free to change or delete any of the code you see in this editor!
+    var svg = d3.select("body").append("svg")
+      .attr("width", 960)
+      .attr("height", 500)
+    
+    /*var surfaces = [23.7, 51.8, 5.1, 3.7, 8.2, 21.0, 20.4]; // 0.14
+    var proportions = surfaces.map(x => x / d3.sum(surfaces))  
+    console.log(proportions)*/
+
+    svg.append("rect")
+    	.attr('x', 10)
+    	.attr('y', 100)
+    	.attr('width', 150)
+    	.attr('height', 200)
+    	.attr('fill', 'none')
+    	.attr('stroke', 'black')
+    
+    svg.append('text')
+    .attr('x', 10)
+    .attr('y', 100)
+    .text('western australia')
+    
+    svg.append("rect")
+    	.attr('x', 160)
+    	.attr('y', 50)
+    	.attr('width', 100)
+    	.attr('height', 150)
+    	.attr('fill', 'none')
+    	.attr('stroke', 'black')
+    
+    svg.append('text')
+    .attr('x', 160)
+    .attr('y', 50)
+    .text('northern territory')
+    
+    svg.append("rect")
+    	.attr('x', 160)
+    	.attr('y', 200)
+    	.attr('width', 150)
+    	.attr('height', 100)
+    	.attr('fill', 'none')
+    	.attr('stroke', 'black')
+    
+    svg.append('text')
+    .attr('x', 160)
+    .attr('y', 200)
+    .text('south australia')
+    
+    svg.append("rect")
+    	.attr('x', 260)
+    	.attr('y', 100)
+    	.attr('width', 180)
+    	.attr('height', 100)
+    	.attr('fill', 'none')
+    	.attr('stroke', 'black')
+    
+    svg.append('text')
+    .attr('x', 260)
+    .attr('y', 100)
+    .text('queensland')
+    
+    svg.append("rect")
+    	.attr('x', 310)
+    	.attr('y', 200)
+    	.attr('width', 130)
+    	.attr('height', 80)
+    	.attr('fill', 'none')
+    	.attr('stroke', 'black')
+    
+    svg.append('text')
+    .attr('x', 310)
+    .attr('y', 200)
+    .text('new south wales')
+    
+    svg.append("rect")
+    	.attr('x', 310)
+    	.attr('y', 280)
+    	.attr('width', 110)
+    	.attr('height', 50)
+    	.attr('fill', 'none')
+    	.attr('stroke', 'black')
+    
+    svg.append('text')
+    .attr('x', 310)
+    .attr('y', 280)
+    .text('victoria')
+    
+    svg.append("rect")
+    	.attr('x', 400)
+    	.attr('y', 350)
+    	.attr('width', 40)
+    	.attr('height', 40)
+    	.attr('fill', 'none')
+    	.attr('stroke', 'black')
+    
+    svg.append('text')
+    .attr('x', 400)
+    .attr('y', 350)
+    .text('tanzania')
+    
+    svg.selectAll('rect')
+    .attr('transform', 'translate(50 0)')
+
+  </script>
+</body>
