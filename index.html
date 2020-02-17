@@ -3,12 +3,23 @@
   <meta charset="utf-8">
   <script src="https://d3js.org/d3.v4.min.js"></script>
   <style>
-    body { margin:0;position:fixed;top:0;right:0;bottom:0;left:0; }
+    body { 
+      margin:0;
+      position:fixed;
+      top:0;
+      right:0;
+      bottom:0;
+      left:0;
+      text-align: center;
+    }
+    h1 { text-align: center; }
   </style>
 </head>
 
 <body>
-  
+
+  <h1>AUSFIRE</h1>
+
   <div id="grid"></div>
   
   <script>
@@ -56,28 +67,6 @@ var states = [
     }
 ]
 
-function gridData(x,y,w,h,nb_div,postal) {
-    var data = new Array();
-    var xpos = x; var ypos = y; var width = w; var height = h;
-    var compteur = 0
-    for (var row = 0; row < nb_div; row++) {
-        for (var column = 0; column < nb_div; column++) {
-            compteur = compteur + 1;
-            data.push({
-                x: xpos,
-                y: ypos,
-                width: width,
-                height: height,
-                name: postal + '_' + compteur
-            })
-            xpos += width;
-        }
-        xpos = x;
-        ypos += height; 
-    }
-    return data;
-}
-
 function initial_draw() {
 
     states.forEach(function(elt) {
@@ -85,16 +74,14 @@ function initial_draw() {
         var gridData = new Array();
         var xpos = elt.x; var ypos = elt.y; var width = elt.w;
         var height = elt.h; var nb_div = elt.nb_div; var postal = elt.postal;
-        var compteur = 0
         for (var row = 0; row < nb_div; row++) {
             for (var column = 0; column < nb_div; column++) {
-                compteur = compteur + 1;
                 gridData.push({
                     x: xpos,
                     y: ypos,
                     width: width,
                     height: height,
-                    name: postal + '_' + compteur
+                    name: postal + '_' + row + '_' + column
                 })
                 xpos += width;
             }
@@ -118,6 +105,58 @@ function initial_draw() {
 }
 
 initial_draw();
+
+function colorize(myDate, myState) {
+
+  d3.csv("https://raw.githubusercontent.com/melkarmo/AUSFIRE/master/bystate/" + myState.name + ".csv", function(data) {
+
+    var fire_area = 0; var old_fire_area = 0;
+    var state_nb_div = myState.nb_div; var forest_area = myState.forest1; var postal_code = myState.postal;
+
+    data.forEach(function(d) {
+        if (d.acq_date === myDate){
+          fire_area = parseFloat(d.fire_area);
+        }
+    })
+    console.log(fire_area);
+      
+    myDateFormatted = new Date(myDate)
+    old_fire_area = d3.sum(data, function(d) {
+        var acq_dateFormatted = new Date(d.acq_date)
+        if (acq_dateFormatted < myDateFormatted) {
+          return parseFloat(d.fire_area)
+        } else {
+          return 0
+        }
+    });
+    console.log(old_fire_area);
+
+    var seuil_fire = parseInt(state_nb_div * state_nb_div * fire_area / forest_area);
+    var seuil_old_fire = seuil_fire + parseInt(state_nb_div * state_nb_div * old_fire_area / forest_area);
+    var compteur = 0
+    for (var row = 0; row < state_nb_div; row++) {
+        for (var column = 0; column < state_nb_div; column++) {
+            compteur += 1;
+            if (compteur <= seuil_fire) {
+              svg.select("."+ postal_code + "_" + row + "_" + column)
+              .style("fill", "red")
+            } else if (compteur <= seuil_old_fire) {
+              svg.select("."+ postal_code + "_" + row + "_" + column)
+              .style("fill", "grey")
+            } else {
+              svg.select("."+ postal_code + "_" + row + "_" + column)
+              .style("fill", "limegreen")
+            }
+        }
+    }
+
+  })
+
+}
+
+states.forEach(function(d){
+  colorize('2020-01-06', d)
+})
 
   </script>
 </body>
