@@ -4,12 +4,6 @@
   <script src="https://d3js.org/d3.v3.min.js"></script>
   <style>
     body { 
-      /*margin:0;
-      position:fixed;
-      top:0;
-      right:0;
-      bottom:0;
-      left:0;*/
       text-align: center;
       font-family: Helvetica
     }
@@ -17,6 +11,20 @@
     #dashboard { padding-top: 20px; }
     #slider { width: 400px; margin-left: 50px; margin-right: 50px; }
     footer { font-size: 15px; padding-top: 45px; }
+    .hidden {
+        display: none;
+    }
+    div.tooltip {
+        color: #222;
+        background-color: #fff;
+        padding: .5em;
+        text-shadow: #f5f5f5 0 1px 0;
+        border-radius: 2px;
+        opacity: 0.9;
+        position: absolute;
+        border: 1px solid #222;
+        text-align: left;
+    }
   </style>
 </head>
 
@@ -41,8 +49,21 @@
 
     <div style="width: 30%; float:right; text-align:left">
 
-      <div>
-        <p>infos</p>
+      <div style="padding-right: 30px;">
+        <h2>Information</h2>
+        <ul>
+          <li><p>Data source : <a href="https://www.kaggle.com/carlosparadis/fires-from-space-australia-and-new-zeland/data#fire_nrt_V1_96617.csv">Fires from Space: Australia</a> (Kaggle)</p></li>
+          <li>
+            <p>Each rectangle represents the forest area of an Australian state</p>
+            <div style="text-align: center;"><img src="info2.jpg" style="max-width:40%;"/></div>
+          </li>
+          <li>
+            <p>Australian Capital Territory data was merged with New South Wales'</p>
+            <div style="text-align: center;"><img src="info1.jpg" style="max-width:30%;"/></div>
+          </li>
+          <li><p>Dates range from the October 1st, 2019 to January 11th, 2020</p></li>
+          <li><p>For more information, move your mouse over a state</p></li>
+        </ul>
       </div>
 
     </div>
@@ -56,7 +77,6 @@
   
   <script>
 
-
 var width = 800, height = 500;
 
 var svg = d3.select("#grid")
@@ -64,53 +84,57 @@ var svg = d3.select("#grid")
 .attr("width", width)
 .attr("height", height)
 
+var tooltip = d3.select('body').append('div').attr('class', 'hidden tooltip');
+
 var states = [
     {
         name: 'Western Australia', postal: 'WA',
         x: 10, y: 100, ratio: 0.75, direction: 'R',
         w: 5, h: 5, nb_w: 20, nb_h: 20,
-        area: 2642753.0, forest: 52855.06
+        area: 2642753.0, forest: 52855.06, population: 2621680
     },
     {
         name: 'Northern Territory', postal: 'NT',
         x: 100, y: 50, ratio: 0.66, direction: 'D',
         w: 5, h: 5, nb_w: 20, nb_h: 20,
-        area: 1419630.0, forest: 42588.9 
+        area: 1419630.0, forest: 42588.9, population: 245869
     },
     {
         name: 'South Australia', postal: 'SA',
         x: 160, y: 200, ratio: 1, direction: 'U',
         w: 5, h: 5, nb_w: 20, nb_h: 20,
-        area: 1044353.0, forest: 31330.59
+        area: 1044353.0, forest: 31330.59, population: 1751693
     },
     {
         name: 'Queensland', postal: 'QLD',
         x: 400, y: 100, ratio: 1.3, direction: 'L',
         w: 5, h: 5, nb_w: 20, nb_h: 20,
-        area: 1851736.0, forest: 370347.2
+        area: 1851736.0, forest: 370347.2, population: 5095100
     },
     {
         name: 'New South Wales', postal: 'NSW',
         x: 400, y: 200, ratio: 1.625, direction: 'L',
         w: 5, h: 5, nb_w: 20, nb_h: 20,
-        area: 812310.0, forest: 97477.2
+        area: 812310.0, forest: 97477.2, population: 8516235
     },
     {
         name: 'Victoria', postal: 'VIC',
         x: 400, y: 280, ratio: 1.8, direction: 'L',
         w: 5, h: 5, nb_w: 20, nb_h: 20,
-        area: 237657.0, forest: 83179.95
+        area: 237657.0, forest: 83179.95, population: 6594804
     },
     {
         name: 'Tasmania', postal: 'TAS',
         x: 600, y: 250, ratio: 1.0, direction: 'D',
         w: 5, h: 5, nb_w: 20, nb_h: 20,
-        area: 90758.0, forest: 58992.7
+        area: 90758.0, forest: 58992.7, population: 534281
     }
 ]
 
 var normalization = 13;
 var unite = 5;
+
+var total_population = 0;
 
 states.forEach(function(d){
   var cote = Math.sqrt(d.forest) / normalization;
@@ -118,16 +142,19 @@ states.forEach(function(d){
   d.nb_h = parseInt(cote / d.ratio);
   d.h = unite; d.w = unite;
   d.x = d.x; d.y = d.y + 150;
+
+  total_population += d.population;
 })
 
 var date_list = [];
-d3.csv("https://raw.githubusercontent.com/melkarmo/AUSFIRE/master/bystate/New%20South%20Wales.csv", function(data) {  
+d3.csv("bystate/New%20South%20Wales.csv", function(data) {  
     data.forEach(function(d){
       date_list.push(d.acq_date)
     })
   }
 )
 
+draw_legend();
 initial_draw();
 colorize_all('2019-10-01');
 
@@ -161,7 +188,29 @@ function initial_draw() {
         .data(data2).enter()
         .append("g")
         .attr('transform', function(d) {return "translate("+(elt.x)+","+(elt.y)+")"})
-        .attr("class", "grid_" + postal);
+        .attr("class", "grid_" + postal)
+        .on('mousemove', function(d) {
+            var mouse = d3.mouse(svg.node()).map(function(d) {
+                return parseInt(d);
+            });
+            tooltip.classed('hidden', false)
+              .attr('style', 'left:' + (mouse[0] + 150) +
+                      'px; top:' + (mouse[1] - 80) + 'px')
+              .html(
+                '<div><b>' + elt.name + '</b> (' + postal + ')<br/>' +
+                '<i>Forest cover :</i> ' + (100 * elt.forest / elt.area).toFixed(1) + ' %<br/>' + 
+                '<i>Population :</i> ' + (elt.population / 10**6).toFixed(2) + ' M hab. (' + (100 * elt.population / total_population).toFixed(2) + ' %)<br/>' +
+                '<br/>' +
+                '<i style="color:red">New fires :</i> ' + elt.count + '<br/>' +
+                '<i style="color:red">Tmax :</i> ' + elt.max_temp + ' °C<br/>' +
+                '<i style="color:grey">Burnt :</i> ' + (100 * elt.fire).toFixed(2) + ' %<br/></div>'
+              );
+            focus_opacity(elt.postal);
+        })
+        .on('mouseout', function() {
+          tooltip.classed('hidden', true);
+          reset_opacity();
+        });
 
         svg.selectAll(".grid_" + postal)
         .append("rect")
@@ -172,7 +221,7 @@ function initial_draw() {
         .style("fill", "None")
         .style("stroke", "white")
         .style("stroke-width", "3");
-
+        
         var square = grid.selectAll(".square")
         .data(function(d) { return d; })
         .enter()
@@ -200,6 +249,8 @@ function colorize(myDate, myState) {
       data.forEach(function(d) {
           if (d.acq_date === myDate){
             fire_area = parseFloat(d.fire_area);
+            myState.count = parseInt(d.count);
+            myState.max_temp = parseFloat(d.max_brightness);
           }
       })
         
@@ -212,6 +263,8 @@ function colorize(myDate, myState) {
             return 0
           }
       });
+
+      myState.fire = (fire_area + old_fire_area) / forest_area;
 
       var seuil_fire = parseInt(state_nb_w * state_nb_h * fire_area / forest_area);
       var seuil_old_fire = seuil_fire + parseInt(state_nb_w * state_nb_h * old_fire_area / forest_area);
@@ -411,6 +464,49 @@ function collide(node) {
 }
 
 /////////////////////////////////////////////
+
+function draw_legend() {
+  
+    var legend = [
+      { color: "red", name: "New fire"},
+      { color: "grey", name: "Burnt"},
+      { color: "limegreen", name: "Safe"}
+    ];
+    var jump = 20;
+
+    legend.forEach(function(d,i) {
+      svg.append("rect")
+      .attr("x", 0 + 30)
+      .attr("y", 15 + 15 + jump*i)
+      .attr("width", 10)
+      .attr("height", 10)
+      .style("fill", d.color)
+
+      svg.append("text")
+      .attr("x", 0 + 30 + 20)
+      .attr("y", 15 + 25 + jump*i)
+      .text(d.name);
+    })
+    
+}
+
+/////////////////////////////////////////////
+
+function focus_opacity(postal) {
+  states.forEach(function(e){
+    if (e.postal != postal) {
+      svg.selectAll(".grid_" + e.postal)
+      .attr("opacity", "0.5")
+    }
+  })
+}
+
+function reset_opacity() {
+  states.forEach(function(e){
+      svg.selectAll(".grid_" + e.postal)
+      .attr("opacity", "1")
+  })
+}
 
   </script>
 </body>
