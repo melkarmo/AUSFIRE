@@ -16,13 +16,13 @@
     h1 { text-align: center; }
     #dashboard { padding-top: 30px; }
     #slider { width: 400px; margin-left: 50px; margin-right: 50px; }
-    footer { font-size: 12px; padding-top: 25px; }
+    footer { font-size: 15px; padding-top: 25px; }
   </style>
 </head>
 
 <body>
 
-  <h1>AUSFIRE : <span style="font-weight: normal;"><i>a visualization of 19/20 Australian Bushfires</i></span></h1>
+  <h1>AUSFIRE : <span style="font-weight: normal;"><i>a visualization of 19/20 Australian Bushfires (Oct 19 - Jan 20)</i></span></h1>
 
   <div id="grid"></div>
 
@@ -35,8 +35,7 @@
 
   <footer>
     made by EL KAMEL Rima, EL KARMOUDI Moncef & MENARD Nicolas<br/>
-    see on <a href="https://github.com/melkarmo/AUSFIRE">GitHub</a><br/>
-    part of <a href="https://github.com/LyonDataViz/MOS5.5-Dataviz">Interactive Data Visualization (ECL MOS 5.5)</a> course
+    see on <a target="_blank" href="https://github.com/melkarmo/AUSFIRE">GitHub</a> | part of <a target="_blank" href="https://github.com/LyonDataViz/MOS5.5-Dataviz">Interactive Data Visualization (ECL MOS 5.5)</a> course
   </footer>
   
   <script>
@@ -101,8 +100,7 @@ states.forEach(function(d){
   var cote = Math.sqrt(d.forest) / normalization;
   d.nb_w = parseInt(cote * d.ratio);
   d.nb_h = parseInt(cote / d.ratio);
-  d.h = unite;
-  d.w = unite;
+  d.h = unite; d.w = unite;
   d.y = d.y + 100
 })
 
@@ -232,12 +230,12 @@ var myTimer;
 d3.select("#start").on("click", function() {
  clearInterval (myTimer);
 	myTimer = setInterval (function() {
-    	var b= d3.select("#slider");
+    	var b = d3.select("#slider");
       var t = (+b.property("value") + 1) % (+b.property("max") + 1);
       if (t == 0) { t = +b.property("min"); }
       b.property("value", t);
       update (t);
-    }, 100);
+    }, 200);
 });
 
 d3.select("#stop").on("click", function() {
