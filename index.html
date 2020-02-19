@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head>
   <meta charset="utf-8">
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  <script src="https://d3js.org/d3.v3.min.js"></script>
   <style>
     body { 
       margin:0;
@@ -11,71 +11,122 @@
       bottom:0;
       left:0;
       text-align: center;
+      font-family: Helvetica
     }
     h1 { text-align: center; }
+    #dashboard { padding-top: 30px; }
+    #slider { width: 400px; margin-left: 50px; margin-right: 50px; }
+    footer { font-size: 12px; padding-top: 25px; }
   </style>
 </head>
 
 <body>
 
-  <h1>AUSFIRE</h1>
+  <h1>AUSFIRE : <span style="font-weight: normal;"><i>a visualization of 19/20 Australian Bushfires</i></span></h1>
 
   <div id="grid"></div>
+
+  <div id="dashboard">
+    <text id="date">2019-10-01</text>
+    <input id="slider" type="range" min="0" max="102" step="1" oninput="update(this.value);" value="0" autocomplete="off"/>
+    <button type="button" id="start">play</button>
+	  <button type="button" id="stop">pause</button>
+  </div>
+
+  <footer>
+    made by EL KAMEL Rima, EL KARMOUDI Moncef & MENARD Nicolas<br/>
+    see on <a href="https://github.com/melkarmo/AUSFIRE">GitHub</a><br/>
+    part of <a href="https://github.com/LyonDataViz/MOS5.5-Dataviz">Interactive Data Visualization (ECL MOS 5.5)</a> course
+  </footer>
   
   <script>
 
+
+var width = 1000, height = 500;
+
 var svg = d3.select("#grid")
 .append("svg")
-.attr("width", 960)
-.attr("height", 500)
+.attr("width", width)
+.attr("height", height)
 
 var states = [
     {
-        name: 'Northern Territory', postal: 'NT',
-        x: 20, y: 20, w: 5, h: 5, nb_div: 20,
-        area: 1419630.0, forest1: 42588.9, forest2: 237000.0
+        name: 'Western Australia', postal: 'WA',
+        x: 10, y: 100, ratio: 0.75,
+        w: 5, h: 5, nb_w: 20, nb_h: 20,
+        area: 2642753.0, forest: 52855.06
     },
     {
-        name: 'Queensland', postal: 'QLD',
-        x: 20 + 120, y: 20, w: 5, h: 5, nb_div: 20,
-        area: 1851736.0, forest1: 370347.2, forest2: 518000.0
+        name: 'Northern Territory', postal: 'NT',
+        x: 100, y: 50, ratio: 0.66,
+        w: 5, h: 5, nb_w: 20, nb_h: 20,
+        area: 1419630.0, forest: 42588.9 
     },
     {
         name: 'South Australia', postal: 'SA',
-        x: 20 + 2*120, y: 20, w: 5, h: 5, nb_div: 20,
-        area: 1044353.0, forest1: 31330.59, forest2: 51000.0
+        x: 160, y: 200, ratio: 1,
+        w: 5, h: 5, nb_w: 20, nb_h: 20,
+        area: 1044353.0, forest: 31330.59
     },
     {
-        name: 'Tasmania', postal: 'TAS',
-        x: 20 + 3*120, y: 20, w: 5, h: 5, nb_div: 20,
-        area: 90758.0, forest1: 58992.7, forest2: 37000.0
-    },
-    {
-        name: 'Victoria', postal: 'VIC',
-        x: 20 + 4*120, y: 20, w: 5, h: 5, nb_div: 20,
-        area: 237657.0, forest1: 83179.95, forest2: 82000.0
-    },
-    {
-        name: 'Western Australia', postal: 'WA',
-        x: 20 + 5*120, y: 20, w: 5, h: 5, nb_div: 20,
-        area: 2642753.0, forest1: 52855.06, forest2: 210000.0
+        name: 'Queensland', postal: 'QLD',
+        x: 400, y: 100, ratio: 1.3,
+        w: 5, h: 5, nb_w: 20, nb_h: 20,
+        area: 1851736.0, forest: 370347.2
     },
     {
         name: 'New South Wales', postal: 'NSW',
-        x: 20 + 6*120, y: 20, w: 5, h: 5, nb_div: 20,
-        area: 812310.0, forest1: 97477.2, forest2: 205400.0
+        x: 400, y: 200, ratio: 1.625,
+        w: 5, h: 5, nb_w: 20, nb_h: 20,
+        area: 812310.0, forest: 97477.2
+    },
+    {
+        name: 'Victoria', postal: 'VIC',
+        x: 400, y: 280, ratio: 1.8,
+        w: 5, h: 5, nb_w: 20, nb_h: 20,
+        area: 237657.0, forest: 83179.95
+    },
+    {
+        name: 'Tasmania', postal: 'TAS',
+        x: 700, y: 350, ratio: 1.0,
+        w: 5, h: 5, nb_w: 20, nb_h: 20,
+        area: 90758.0, forest: 58992.7
     }
 ]
+
+var normalization = 13;
+var unite = 5;
+
+states.forEach(function(d){
+  var cote = Math.sqrt(d.forest) / normalization;
+  d.nb_w = parseInt(cote * d.ratio);
+  d.nb_h = parseInt(cote / d.ratio);
+  d.h = unite;
+  d.w = unite;
+  d.y = d.y + 100
+})
+
+var date_list = [];
+d3.csv("https://raw.githubusercontent.com/melkarmo/AUSFIRE/master/bystate/New%20South%20Wales.csv", function(data) {  
+    data.forEach(function(d){
+      date_list.push(d.acq_date)
+    })
+  }
+)
+
+initial_draw();
+colorize_all('2019-10-01');
 
 function initial_draw() {
 
     states.forEach(function(elt) {
 
         var gridData = new Array();
-        var xpos = elt.x; var ypos = elt.y; var width = elt.w;
-        var height = elt.h; var nb_div = elt.nb_div; var postal = elt.postal;
-        for (var row = 0; row < nb_div; row++) {
-            for (var column = 0; column < nb_div; column++) {
+        var xpos = 0; var ypos = 0;
+        var width = elt.w; var height = elt.h; var nb_w = elt.nb_w; var nb_h = elt.nb_h;
+        var postal = elt.postal;
+        for (var row = 0; row < nb_h; row++) {
+            for (var column = 0; column < nb_w; column++) {
                 gridData.push({
                     x: xpos,
                     y: ypos,
@@ -85,12 +136,21 @@ function initial_draw() {
                 })
                 xpos += width;
             }
-            xpos = elt.x;
+            xpos = 0;
             ypos += height; 
         }
 
-        svg.selectAll()
-        .data(gridData)
+        var data2 = new Array();
+        data2.push(gridData);
+
+        var grid = svg.selectAll(".grid")
+        .data(data2).enter()
+        .append("g")
+        .attr('transform', function(d) {return "translate("+(elt.x)+","+(elt.y)+")"})
+        .attr("class", "grid_" + postal);
+
+        var square = grid.selectAll(".square")
+        .data(function(d) { return d; })
         .enter()
         .append("rect")
         .attr("class", function(d) { return d.name; })
@@ -104,59 +164,172 @@ function initial_draw() {
     })
 }
 
-initial_draw();
-
 function colorize(myDate, myState) {
 
-  d3.csv("https://raw.githubusercontent.com/melkarmo/AUSFIRE/master/bystate/" + myState.name + ".csv", function(data) {
+    d3.csv("https://raw.githubusercontent.com/melkarmo/AUSFIRE/master/bystate/" + myState.name + ".csv", function(data) {
 
-    var fire_area = 0; var old_fire_area = 0;
-    var state_nb_div = myState.nb_div; var forest_area = myState.forest1; var postal_code = myState.postal;
+      var fire_area = 0; var old_fire_area = 0;
+      var state_nb_w = myState.nb_w; var state_nb_h = myState.nb_h;
+      var forest_area = myState.forest; var postal_code = myState.postal;
 
-    data.forEach(function(d) {
-        if (d.acq_date === myDate){
-          fire_area = parseFloat(d.fire_area);
-        }
+      data.forEach(function(d) {
+          if (d.acq_date === myDate){
+            fire_area = parseFloat(d.fire_area);
+          }
+      })
+        
+      myDateFormatted = new Date(myDate)
+      old_fire_area = d3.sum(data, function(d) {
+          var acq_dateFormatted = new Date(d.acq_date)
+          if (acq_dateFormatted < myDateFormatted) {
+            return parseFloat(d.fire_area)
+          } else {
+            return 0
+          }
+      });
+
+      var seuil_fire = parseInt(state_nb_w * state_nb_h * fire_area / forest_area);
+      var seuil_old_fire = seuil_fire + parseInt(state_nb_w * state_nb_h * old_fire_area / forest_area);
+      var compteur = 0
+      for (var row = 0; row < state_nb_h; row++) {
+          for (var column = 0; column < state_nb_w; column++) {
+              compteur += 1;
+              if (compteur <= seuil_fire) {
+                svg.select("."+ postal_code + "_" + row + "_" + column)
+                .style("fill", "red")
+              } else if (compteur <= seuil_old_fire) {
+                svg.select("."+ postal_code + "_" + row + "_" + column)
+                .style("fill", "grey")
+              } else {
+                svg.select("."+ postal_code + "_" + row + "_" + column)
+                .style("fill", "limegreen")
+              }
+          }
+      }
+
     })
-    console.log(fire_area);
-      
-    myDateFormatted = new Date(myDate)
-    old_fire_area = d3.sum(data, function(d) {
-        var acq_dateFormatted = new Date(d.acq_date)
-        if (acq_dateFormatted < myDateFormatted) {
-          return parseFloat(d.fire_area)
-        } else {
-          return 0
-        }
-    });
-    console.log(old_fire_area);
-
-    var seuil_fire = parseInt(state_nb_div * state_nb_div * fire_area / forest_area);
-    var seuil_old_fire = seuil_fire + parseInt(state_nb_div * state_nb_div * old_fire_area / forest_area);
-    var compteur = 0
-    for (var row = 0; row < state_nb_div; row++) {
-        for (var column = 0; column < state_nb_div; column++) {
-            compteur += 1;
-            if (compteur <= seuil_fire) {
-              svg.select("."+ postal_code + "_" + row + "_" + column)
-              .style("fill", "red")
-            } else if (compteur <= seuil_old_fire) {
-              svg.select("."+ postal_code + "_" + row + "_" + column)
-              .style("fill", "grey")
-            } else {
-              svg.select("."+ postal_code + "_" + row + "_" + column)
-              .style("fill", "limegreen")
-            }
-        }
-    }
-
-  })
 
 }
 
-states.forEach(function(d){
-  colorize('2020-01-06', d)
-})
+function colorize_all(myDate) {
+    states.forEach(function(d){
+      colorize(myDate, d)
+    })
+}
+
+/////////////////////////////////////////////
+
+function update(val) {
+  colorize_all(date_list[val]);
+  d3.select("#date").text(date_list[val]);
+}
+
+d3.select('#slider').on('input', function() {
+  update(this.value);
+});
+
+var myTimer;
+d3.select("#start").on("click", function() {
+ clearInterval (myTimer);
+	myTimer = setInterval (function() {
+    	var b= d3.select("#slider");
+      var t = (+b.property("value") + 1) % (+b.property("max") + 1);
+      if (t == 0) { t = +b.property("min"); }
+      b.property("value", t);
+      update (t);
+    }, 100);
+});
+
+d3.select("#stop").on("click", function() {
+	clearInterval (myTimer);
+});
+
+/////////////////////////////////////////////
+
+var gravite = 0.015;
+var nodes = new Array();
+
+nodes.push({
+      x:20000,
+      y:20000,
+      width:0,
+      height:0,
+      fixed:true
+    })
+
+states.forEach(function(state){
+    nodes.push({
+      x:state.x,
+      y:state.y,
+      width:state.w*state.nb_w,
+      height:state.h*state.nb_h,
+      name:"grid_"+state.postal})
+});
+
+nodes[nodes.length - 1].fixed = true;
+
+var force = d3.layout.force()
+	.gravity(gravite)
+	.charge(function(d, i) { return i ? -30 : -2000; })
+	.nodes(nodes)
+	.size([width, height]);
+
+force.on('tick', function(e) {
+	var q = d3.geom.quadtree(nodes),
+		i = 0,
+		n = nodes.length;
+
+	while (++i < n) {
+		q.visit(collide(nodes[i]));
+	}
+
+  nodes.slice(1).forEach(function(dd){
+    svg.selectAll('.' + dd.name)
+		.attr('transform', "translate("+(dd.x-dd.width/2)+","+(dd.y-dd.height/2)+")");
+  })
+});
+
+force.start();
+
+function collide(node) {
+	return function(quad, x1, y1, x2, y2) {
+		var updated = false;
+		if (quad.point && (quad.point !== node)) {
+
+			var x = node.x - quad.point.x,
+				y = node.y - quad.point.y,
+				xSpacing = (quad.point.width + node.width) / 2,
+				ySpacing = (quad.point.height + node.height) / 2,
+				absX = Math.abs(x),
+				absY = Math.abs(y),
+				l,
+				lx,
+				ly;
+
+			if (absX < xSpacing && absY < ySpacing) {
+				l = Math.sqrt(x * x + y * y);
+
+				lx = (absX - xSpacing) / l;
+				ly = (absY - ySpacing) / l;
+
+				if (Math.abs(lx) > Math.abs(ly)) {
+					lx = 0;
+				} else {
+					ly = 0;
+				}
+
+				node.x -= x *= lx;
+				node.y -= y *= ly;
+				quad.point.x += x;
+				quad.point.y += y;
+        
+
+				updated = true;
+			}
+		}
+		return updated;
+	};
+}
 
   </script>
 </body>
