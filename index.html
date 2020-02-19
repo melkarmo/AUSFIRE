@@ -61,7 +61,7 @@
             <p>Australian Capital Territory data was merged with New South Wales'</p>
             <div style="text-align: center;"><img src="info1.jpg" style="max-width:30%;"/></div>
           </li>
-          <li><p>Dates range from the October 1st, 2019 to January 11th, 2020</p></li>
+          <li><p>Dates range from October 1st, 2019 to January 11th, 2020</p></li>
           <li><p>For more information, move your mouse over a state</p></li>
         </ul>
       </div>
@@ -194,7 +194,7 @@ function initial_draw() {
                 return parseInt(d);
             });
             tooltip.classed('hidden', false)
-              .attr('style', 'left:' + (mouse[0] + 150) +
+              .attr('style', 'left:' + (mouse[0] + 20) +
                       'px; top:' + (mouse[1] - 80) + 'px')
               .html(
                 '<div><b>' + elt.name + '</b> (' + postal + ')<br/>' +
