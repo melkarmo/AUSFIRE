@@ -52,17 +52,16 @@
       <div style="padding-right: 30px;">
         <h2>Information</h2>
         <ul>
-          <li><p>Data source : <a href="https://www.kaggle.com/carlosparadis/fires-from-space-australia-and-new-zeland/data#fire_nrt_V1_96617.csv">Fires from Space: Australia</a> (Kaggle)</p></li>
           <li>
             <p>Each rectangle represents the forest area of an Australian state</p>
-            <div style="text-align: center;"><img src="info2.jpg" style="max-width:40%;"/></div>
+            <div style="text-align: center;"><img src="images/info2.jpg" style="max-width:40%;"/></div>
           </li>
+          <li><p><i style="color:red; font-weight:bold;">Important :</i> the positions of cells on the rectangles do not represent the real positions on the actual state</p></li>
           <li>
             <p>Australian Capital Territory data was merged with New South Wales'</p>
-            <div style="text-align: center;"><img src="info1.jpg" style="max-width:30%;"/></div>
+            <div style="text-align: center;"><img src="images/info1.jpg" style="max-width:30%;"/></div>
           </li>
           <li><p>Dates range from October 1st, 2019 to January 11th, 2020</p></li>
-          <li><p>For more information, move your mouse over a state</p></li>
         </ul>
       </div>
 
@@ -363,7 +362,7 @@ d3.select('#slider').on('input', function() {
 var myTimer;
 d3.select("#start").on("click", function() {
  clearInterval (myTimer);
-	myTimer = setInterval (function() {
+ myTimer = setInterval (function() {
     	var b = d3.select("#slider");
       var t = (+b.property("value") + 1) % (+b.property("max") + 1);
       if (t == 0) { t = +b.property("min"); }
