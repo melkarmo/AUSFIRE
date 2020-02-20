@@ -142,6 +142,7 @@ var states = [
 
 var normalization = 13;
 var unite = 5;
+var unite_area = 0;
 
 var total_population = 0;
 
@@ -153,7 +154,10 @@ states.forEach(function(d){
   d.x = d.x; d.y = d.y + 150;
 
   total_population += d.population;
+  unite_area += d.forest / (d.nb_w * d.nb_h);
 })
+
+unite_area = unite_area / 7;
 
 var date_list = [];
 d3.csv("bystate/New%20South%20Wales.csv", function(data) {  
@@ -275,8 +279,9 @@ function colorize(myDate, myState) {
 
       myState.fire = (fire_area + old_fire_area) / forest_area;
 
-      var seuil_fire = parseInt(state_nb_w * state_nb_h * fire_area / forest_area);
-      var seuil_old_fire = seuil_fire + parseInt(state_nb_w * state_nb_h * old_fire_area / forest_area);
+      var seuil_old_fire = parseInt(state_nb_w * state_nb_h * old_fire_area / forest_area);
+      var seuil_fire = seuil_old_fire + parseInt(state_nb_w * state_nb_h * fire_area / forest_area);
+      
 
       if (direction == 'D') { coloring_down(state_nb_h, state_nb_w, seuil_fire, seuil_old_fire, postal_code); }
       else if (direction == 'R') { coloring_right(state_nb_h, state_nb_w, seuil_fire, seuil_old_fire, postal_code); }
@@ -331,12 +336,12 @@ function coloring_left(state_nb_h, state_nb_w, seuil_fire, seuil_old_fire, posta
 }
 
 function coloring_cell(compteur, seuil_fire, seuil_old_fire, postal_code, row, column) {
-    if (compteur <= seuil_fire) {
-      svg.select("."+ postal_code + "_" + row + "_" + column)
-      .style("fill", "red")
-    } else if (compteur <= seuil_old_fire) {
+    if (compteur <= seuil_old_fire) {
       svg.select("."+ postal_code + "_" + row + "_" + column)
       .style("fill", "grey")
+    } else if (compteur <= seuil_fire) {
+      svg.select("."+ postal_code + "_" + row + "_" + column)
+      .style("fill", "red")
     } else {
       svg.select("."+ postal_code + "_" + row + "_" + column)
       .style("fill", "limegreen")
@@ -496,6 +501,20 @@ function draw_legend() {
       .attr("y", 15 + 25 + jump*i)
       .text(d.name);
     })
+
+    svg.append("rect")
+    .attr("x", 32)
+    .attr("y", 100)
+    .attr("width", unite)
+    .attr("height", unite)
+    .style("fill", "white")
+    .style("stroke", "black")
+
+    svg.append("text")
+    .attr("x", 45)
+    .attr("y", 107)
+    .text('=  ' + unite_area.toFixed(2) + ' km²')
+    .style("font-size", "13px");
     
 }
 
