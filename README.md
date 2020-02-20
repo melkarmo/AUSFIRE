@@ -16,7 +16,7 @@ Each cell of a grid shows a freshly-burning area, an already-burning area, or a 
 
 ## Screenshots
 
-![image](https://melkarmo.github.io/AUSFIRE/images/screenshot.png)
+![image](https://melkarmo.github.io/AUSFIRE/images/screenshot.PNG)
 
 ## Data
 
