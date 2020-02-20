@@ -48,4 +48,4 @@ Thank you for your help !
 
 * [Flaticon](https://www.flaticon.com/)'s flame icon;
 
-* LyonDataViz and Centrale Lyon for the Interactive DataViz [course](https://github.com/LyonDataViz/MOS5.5-Dataviz).
+* LyonDataViz, Centrale Lyon and our teachers [romsson](https://github.com/romsson/) and [Theo-Jaunet](https://github.com/theo-jaunet) for the Interactive DataViz [course](https://github.com/LyonDataViz/MOS5.5-Dataviz).
