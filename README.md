@@ -11,7 +11,7 @@ A visualization of 19/20 Australian Bushfires, part of the [Interactive Data Vis
 ## Description of the project
 
 This project consists on the visualization of the 19/20 Australian Bushfires evolution from October 2019 to 11th January 2020 by state.  
-* Each state is displayed as a grid which total area is defined according to its forest cover area.  
+* Each state is displayed as a grid which total area is defined according to its forest cover area. 
 * Each cell of a grid shows a freshly-burning area, an already-burning area, or a sane area.
 
 ## Screenshot
@@ -30,19 +30,19 @@ We then processed the data to group the fire starts by Australian state. The fin
 
 Thank you for all your help !
 
-* NASA for making the data public, and kaggler [Carlos Paradis](https://www.kaggle.com/carlosparadis) for making it easy to access ([here](https://www.kaggle.com/carlosparadis/fires-from-space-australia-and-new-zeland#fire_nrt_M6_96619.csv)) ;
+* NASA for making the data public, and kaggler [Carlos Paradis](https://www.kaggle.com/carlosparadis) for making it easy to access ([here](https://www.kaggle.com/carlosparadis/fires-from-space-australia-and-new-zeland#fire_nrt_M6_96619.csv));
 
-* Wikipedia for Australian states' related [data](https://en.wikipedia.org/wiki/Forest_cover_by_state_or_territory_in_Australia) ;
+* Wikipedia for Australian states' related [data](https://en.wikipedia.org/wiki/Forest_cover_by_state_or_territory_in_Australia);
 
 
-* [Ajay Thampi](https://github.com/thampiman) for the [Reverse Geocoder](https://github.com/thampiman/reverse-geocoder) python package that allows offline and quick reverse geocoding on massive data ;
+* [Ajay Thampi](https://github.com/thampiman) for the [Reverse Geocoder](https://github.com/thampiman/reverse-geocoder) python package that allows offline and quick reverse geocoding on massive data;
 
-* [Let's Make a Grid with D3.js](https://bl.ocks.org/cagrimmett/07f8c8daea00946b9e704e3efcbd5739) ;
+* [Let's Make a Grid with D3.js](https://bl.ocks.org/cagrimmett/07f8c8daea00946b9e704e3efcbd5739);
 
-* [D3 HTML Range Slider Play/Pause](https://jsfiddle.net/bfbun6cc/4/) ;
+* [D3 HTML Range Slider Play/Pause](https://jsfiddle.net/bfbun6cc/4/);
 
-* [Rect Collision](http://bl.ocks.org/natebates/273b99ddf86e2e2e58ff) ;
+* [Rect Collision](http://bl.ocks.org/natebates/273b99ddf86e2e2e58ff);
 
-* [Flaticon](https://www.flaticon.com/)'s flame icon ;
+* [Flaticon](https://www.flaticon.com/)'s flame icon;
 
 * LyonDataViz and Centrale Lyon for the Interactive DataViz [course](https://github.com/LyonDataViz/MOS5.5-Dataviz).
