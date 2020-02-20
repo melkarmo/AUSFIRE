@@ -28,7 +28,7 @@ We then processed the data to group the fire starts by Australian state. The fin
 
 ## Credits
 
-Thank you for all your help !
+Thank you for your help !
 
 * NASA for making the data public, and kaggler [Carlos Paradis](https://www.kaggle.com/carlosparadis) for making it easy to access ([here](https://www.kaggle.com/carlosparadis/fires-from-space-australia-and-new-zeland#fire_nrt_M6_96619.csv));
 
