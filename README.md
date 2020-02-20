@@ -38,7 +38,7 @@ Thank you for your help !
 
 * [Ajay Thampi](https://github.com/thampiman) for the [Reverse Geocoder](https://github.com/thampiman/reverse-geocoder) python package that allows offline and quick reverse geocoding on massive data;
 
-* [Trifacta](https://www.trifacta.com/fr/) for their easy-to-use data wrangling tool, free for student;
+* [Trifacta](https://www.trifacta.com/fr/) for their easy-to-use data wrangling tool, free for students;
 
 * [Let's Make a Grid with D3.js](https://bl.ocks.org/cagrimmett/07f8c8daea00946b9e704e3efcbd5739);
 
