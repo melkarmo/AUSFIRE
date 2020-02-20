@@ -34,7 +34,6 @@ Thank you for all your help !
 
 * Wikipedia for Australian states' related [data](https://en.wikipedia.org/wiki/Forest_cover_by_state_or_territory_in_Australia);
 
-
 * [Ajay Thampi](https://github.com/thampiman) for the [Reverse Geocoder](https://github.com/thampiman/reverse-geocoder) python package that allows offline and quick reverse geocoding on massive data;
 
 * [Let's Make a Grid with D3.js](https://bl.ocks.org/cagrimmett/07f8c8daea00946b9e704e3efcbd5739);
