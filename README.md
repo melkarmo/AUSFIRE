@@ -2,6 +2,8 @@
 
 A visualization of 19/20 Australian Bushfires, part of the [Interactive Data Visualization (ECL MOS 5.5)](https://github.com/LyonDataViz/MOS5.5-Dataviz) course.
 
+*Link :* https://melkarmo.github.io/AUSFIRE/
+
 ## Participants
 
 * EL KAMEL Rima ([RimaElkamel](https://github.com/RimaElkamel))
