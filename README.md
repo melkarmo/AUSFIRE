@@ -24,7 +24,7 @@ The main data source used for our project is the [Fires from Space: Australia](h
 
 Australian states' data (name, area, forest cover, population) was found by a basic Wikipedia search.
 
-We then processed the data to group the fire starts by Australian state. The final datasets are located in the "bystate" file, and states' data is included in the 'index.html' code as it only consists of 7 states.
+We then processed the data to group the fire starts by Australian state. The final datasets are located in the `bystate` file, and states' data is included in the `index.html` code as it only consists of 7 states.
 
 ## Credits
 
