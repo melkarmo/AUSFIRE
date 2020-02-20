@@ -20,7 +20,7 @@ This project consists on the visualization of the 19/20 Australian Bushfires evo
 
 ## Data
 
-The main data source used for our project is the "Fires from Space: Australia" dataset which consists of fire starts detected by NASA MODIS satellite : the dataset includes the geolocalisation of these fire starts (latitude, longitude), and the mean temperature and the power of the fires at each location.
+The main data source used for our project is the [Fires from Space: Australia](https://www.kaggle.com/carlosparadis/fires-from-space-australia-and-new-zeland#fire_nrt_M6_96619.csv) dataset which consists of fire starts detected by NASA MODIS satellite : the dataset includes the geolocalisation of these fire starts (latitude, longitude), and the mean temperature and the power of the fires at each location.
 
 Australian states' data (name, area, forest cover, population) was found by a basic Wikipedia search.
 
