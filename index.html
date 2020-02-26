@@ -20,7 +20,7 @@
     h1 { text-align: center; }
     #dashboard { padding-top: 20px; }
     #slider { width: 400px; margin-left: 50px; margin-right: 50px; }
-    footer { font-size: 15px; padding-top: 45px; }
+    footer { font-size: 15px; padding-top: 35px; }
     .hidden {
         display: none;
     }
@@ -44,7 +44,7 @@
 
   <div style="overflow:auto;">
 
-    <div style="width: 70%; float:left" >
+    <div style="width: 65%; float:left" >
 
       <div id="grid"></div>
 
@@ -57,21 +57,21 @@
 
     </div>
 
-    <div style="width: 30%; float:right; text-align:left">
+    <div style="width: 35%; float:right; text-align:left;">
 
       <div style="padding-right: 30px;">
         <h2>Information</h2>
-        <ul>
+        <ul style="font-size: 15px;">
           <li>
-            <p>Each rectangle represents the forest area of an Australian state, and each cell represents an area unit</p>
-            <div style="text-align: center;"><img src="images/info2.jpg" style="max-width:40%;"/></div>
+            <p>Each rectangle represents only the forest area of an Australian state, and is therefore a portion of the total state area.</p>
+            <p>The ratio of forest area to total state area is indicated in the state's tooltip (mouse over a state, and see the <i style="color:limegreen">Forest cover</i> field).</p>
+            <div style="text-align: center;"><img src="images/info2.jpg" style="max-width:45%;"/></div>
           </li>
-          <li><p><i style="color:red; font-weight:bold;">Important :</i> the positions of cells on the rectangles do not represent the real positions on the actual state</p></li>
           <li>
-            <p>Australian Capital Territory data was merged with New South Wales'</p>
-            <div style="text-align: center;"><img src="images/info1.jpg" style="max-width:30%;"/></div>
-          </li>
-          <li><p>Dates range from October 1st, 2019 to January 11th, 2020</p></li>
+            <p>Each state (rectangle) is divided into cells (small squares) forming a grid. Each cell represents an area unit corresponding to 178.49 km² of forest in real life.</p>
+            <p><i style="color:red; font-weight:bold;">Important :</i> the positions of cells on the rectangles do not represent the real positions on the actual state</p></li>
+          <li><p>Australian Capital Territory data was merged with New South Wales'.</p></li>
+          <li><p>Dates range from October 1st, 2019 to January 11th, 2020.</p></li>
         </ul>
       </div>
 
@@ -211,7 +211,7 @@ function initial_draw() {
                       'px; top:' + (mouse[1] - 80) + 'px')
               .html(
                 '<div><b>' + elt.name + '</b> (' + postal + ')<br/>' +
-                '<i>Forest cover :</i> ' + (100 * elt.forest / elt.area).toFixed(1) + ' %<br/>' + 
+                '<i style="color:limegreen">Forest cover :</i> ' + (100 * elt.forest / elt.area).toFixed(1) + ' % of total state area<br/>' + 
                 '<i>Population :</i> ' + (elt.population / 10**6).toFixed(2) + ' M hab. (' + (100 * elt.population / total_population).toFixed(2) + ' %)<br/>' +
                 '<br/>' +
                 '<i style="color:red">New fires :</i> ' + elt.count + '<br/>' +
