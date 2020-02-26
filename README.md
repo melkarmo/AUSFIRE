@@ -18,7 +18,7 @@ This project consists on the visualization of the 19/20 Australian Bushfires evo
 
 ## Screenshot
 
-![image](https://melkarmo.github.io/AUSFIRE/images/screenshot.PNG)
+![screenshot](https://melkarmo.github.io/AUSFIRE/images/screenshot.PNG)
 
 ## Data
 
